@@ -108,7 +108,7 @@ joth = (function (window, document, jquery) {
 		modifyResponse(data) {
 			if (this.isJson(data)) {
 				var data = window.JSON.parse(data),
-					attrs = this.getAttrs(data.url || '');
+					attrs = this.getAttrs(data.pathForJoth || '');
 
 				this.resolveAttrs(attrs, data, this.cipher.aes.decode);
 
@@ -116,8 +116,21 @@ joth = (function (window, document, jquery) {
 			}
 		},
 
-		getAttrs(url) {
-			return this.namedAttrs[url] || this.attrs;
+		getAttrs(path) {
+			for (key in this.namedAttrs) {
+				var keyReplaced = key.replace(/\*/g, '.*'),
+					regex = new RegExp(`^${keyReplaced}$`, 'u'),
+					regexTrimed = new RegExp(`^${this.trim(keyReplaced, '/')}$`, 'u');
+
+				if (
+					regex.test(path)
+					|| regexTrimed.test(path)
+				) {
+					return this.namedAttrs[key]
+				}
+			}
+
+			return this.attrs
 		},
 
 		resolveAttrs(attrs, data, resolver) {
@@ -157,14 +170,23 @@ joth = (function (window, document, jquery) {
 		filter(data) {
 			return this.unique(data.filter(Boolean)
 				.filter(value => ['string', 'number'].includes(typeof value))
-				.map(String)
-				.filter(value => !value.includes('.')))
+				.map(String))
 		},
 
 		unique(array) {
 			return array.filter(function (value, index, self) {
 				return self.indexOf(value) === index;
 			});
+		},
+
+		trim(string, c) {
+			if (c === "]") c = "\\]";
+			if (c === "^") c = "\\^";
+			if (c === "\\") c = "\\\\";
+
+			return string.replace(new RegExp(
+				"^[" + c + "]+|[" + c + "]+$", "g"
+			), "");
 		},
 
 		getValue(obj, path, defaultValue = undefined) {

@@ -25,6 +25,8 @@ joth.secret('a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e');
 ```javascript
 joth.to('/auth', 'email', 'password');
 
+joth.to('/user/*', 'email', 'name');
+
 joth.to('/invoice', ['name', 'address']);
 ```
 
