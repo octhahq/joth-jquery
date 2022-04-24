@@ -7,7 +7,7 @@ If you need to transit sensitive data you know leaving it in plaintext is not id
 ## Installation
 
 ```html
-<script src="https://raw.githubusercontent.com/octhahq/joth-jquery/main/joth.min.js"></script>
+<script src="https://octhahq.github.io/joth-jquery/joth.min.js"></script>
 ```
 
 ## Usage
