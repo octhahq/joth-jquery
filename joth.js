@@ -16,21 +16,21 @@ joth = (function (window, document, jquery) {
 				encode(str, secret) {
 					secret = joth.cipher.aes.getKeyAndIv(secret);
 
-					return window.CryptoJS.AES.encrypt(
+					return joth.cipher.encode(window.CryptoJS.AES.encrypt(
 						str,
 						window.CryptoJS.enc.Utf8.parse(secret.key),
 						{
 							iv: window.CryptoJS.enc.Utf8.parse(secret.iv),
 							mode: window.CryptoJS.mode.CBC,
 						}
-					).toString()
+					).toString())
 				},
 
 				decode(str, secret) {
 					secret = joth.cipher.aes.getKeyAndIv(secret);
 
 					return window.CryptoJS.AES.decrypt(
-						str,
+						joth.cipher.decode(str),
 						window.CryptoJS.enc.Utf8.parse(secret.key),
 						{
 							iv: window.CryptoJS.enc.Utf8.parse(secret.iv),
@@ -40,21 +40,13 @@ joth = (function (window, document, jquery) {
 				},
 			},
 
-			urlsafeB64Encode(str) {
-				return str.replace(/\+/g, '-')
-					.replace(new RegExp('\/', 'g'), '.')
-					.replace(/=/g, '_')
+			encode(value) {
+				return window.CryptoJS.enc.Base64.stringify(window.CryptoJS.enc.Utf8.parse(window.JSON.stringify(value)))
 			},
 
-			urlsafeB64Decode(str) {
-				return str.replace(/-/g, '+')
-					.replace(/\./g, '/')
-					.replace(/_/g, '=')
+			decode(value) {
+				return window.JSON.parse(CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(value)))
 			},
-
-			init() {
-				this.aes.parent = this;
-			}
 		},
 
 		secret(str) {
