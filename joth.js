@@ -117,6 +117,8 @@ joth = (function (window, document, jquery) {
 		},
 
 		getAttrs(path) {
+			path = path.replace(window.location.protocol + '//' + window.location.host, '');
+
 			for (key in this.namedAttrs) {
 				var keyReplaced = key.replace(/\*/g, '.*'),
 					regex = new RegExp(`^${keyReplaced}$`, 'u'),
