@@ -99,8 +99,8 @@ joth = (function (window, document, jquery) {
 
 			for (key in this.namedAttrs) {
 				var keyReplaced = key.replace(/\*/g, '.*'),
-					regex = new RegExp(`^${keyReplaced}$`, 'u'),
-					regexTrimed = new RegExp(`^${this.trim(keyReplaced, '/')}$`, 'u');
+					regex = new RegExp('^' + keyReplaced + '$', 'u'),
+					regexTrimed = new RegExp('^' + this.trim(keyReplaced, '/') + '$', 'u');
 
 				if (
 					regex.test(path)
