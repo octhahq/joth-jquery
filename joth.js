@@ -29,14 +29,14 @@ joth = (function (window, document, jquery) {
 				decode(str, secret) {
 					secret = joth.cipher.aes.getKeyAndIv(secret);
 
-					return window.CryptoJS.AES.decrypt(
-						joth.cipher.decode(str),
+					return joth.cipher.decode(window.CryptoJS.AES.decrypt(
+						str,
 						window.CryptoJS.enc.Utf8.parse(secret.key),
 						{
 							iv: window.CryptoJS.enc.Utf8.parse(secret.iv),
 							mode: window.CryptoJS.mode.CBC,
 						}
-					).toString(window.CryptoJS.enc.Utf8)
+					).toString(window.CryptoJS.enc.Utf8))
 				},
 			},
 
